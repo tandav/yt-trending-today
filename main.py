@@ -3,6 +3,8 @@ import string
 from credentials import api_key
 
 import util
+import datetime
+import dateutil
 import itertools
 
 playlists = [
@@ -20,5 +22,5 @@ top = sorted(top, key=lambda v: int(v['statistics']['viewCount']), reverse=True)
 
 for v in top:
     vc = int(v['statistics']['viewCount'])
-    print(f"{vc:10,} https://www.youtube.com/watch?v={v['id']} {v['snippet']['channelTitle'][:15]:<15} {v['snippet']['title']:<40}")
-
+    published_ago = util.ago((datetime.datetime.now(datetime.timezone.utc) - dateutil.parser.parse(v['snippet']['publishedAt'])).total_seconds())
+    print(f"{vc:10,} │ youtube.com/watch?v={v['id']} │ {v['snippet']['channelTitle'][:15]:<15} {published_ago:>12} │ {v['snippet']['title']:<40}")
