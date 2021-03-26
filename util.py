@@ -137,26 +137,6 @@ def playlists(channelId, api_key):
     return playlists
 
 
-def videos(playlistId, api_key, limit=False):
-    payload = {
-        'part': 'snippet',
-        'playlistId': playlistId,
-        'maxResults': 50,
-        'key': api_key,
-    }
-
-    r = requests.get('https://www.googleapis.com/youtube/v3/playlistItems', params=payload).json()
-    videos = r['items']
-
-    # do while emulation
-    while 'nextPageToken' in r:
-        payload['pageToken'] = r['nextPageToken']
-        r = requests.get('https://www.googleapis.com/youtube/v3/playlistItems', params=payload).json()
-        videos += r['items']
-        if limit and len(videos) >= limit:
-            break
-    return videos
-
 
 def top_recent(playlistId, api_key, recent_days=1):
     def _days_ago_published(v):
